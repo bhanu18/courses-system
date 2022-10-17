@@ -10,9 +10,9 @@ const courseSchema = mongoose.Schema({
     image: {
         type: String
     },
-    intructor: {
+    User: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Role'
+        ref: 'User'
     },
     price: {
         type: String
@@ -20,7 +20,7 @@ const courseSchema = mongoose.Schema({
     time:{
         type: String,
     },
-    Category: {
+    Categories: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Categories'
     },

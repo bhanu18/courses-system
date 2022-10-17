@@ -1,7 +1,7 @@
 import UserModel from "../models/Users.js";
 import bcrypt from 'bcryptjs';
 import passport from "passport";
-
+import Role from "../models/Role.js";
 
 export const findUser = async (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
@@ -66,6 +66,27 @@ export const logUserOut = (req, res) => {
         if (err) { return next(err); }
         req.send('success_msg', 'Logged out succesfully')
     });
+}
+
+export const role = async (req, res) => {
+
+    try {
+        const role = await Role.find().lean();
+        res.send(role);
+    } catch (error) {
+        console.log(err);
+        res.status(500);
+    }
+}
+
+export const addrole = async (req, res) => {
+    try {
+        const role = await Role.create(req.body);
+        res.send(role);
+    } catch (error) {
+        console.log(err);
+        res.status(500);
+    }
 }
 
 function randomSting(length) {
