@@ -9,5 +9,7 @@ router.post('/add', addCourses);
 
 router.post('/category/add', addCategory);
 
+router.get('/get', filter);
+
 
 export default router;

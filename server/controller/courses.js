@@ -35,3 +35,15 @@ export const addCategory = async (req, res) =>{
     }
 }
 
+export const filter = async (req, res ) => {
+    try {
+        const course = await courseModel.find({ title: req.query.title }).populate('User').lean();
+
+        res.send(course)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({'msg': '500'});
+    }
+}
+
+
