@@ -47,3 +47,12 @@ export const filter = async (req, res ) => {
 }
 
 
+export const deleteCourse = async () => {
+    try {
+        const course = await courseModel.deleteOne();
+    } catch (error) {
+        
+    }
+}
+
+

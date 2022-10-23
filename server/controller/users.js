@@ -6,7 +6,7 @@ import Role from "../models/Role.js";
 export const findUser = async (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) throw err;
-        if (!user) res.send(" Email or password is incorrect");
+        if (!user) res.json({"success": false,"msg":" Email or password is incorrect"});
         else {
             req.logIn(user, async (err) => {
                 const token = randomSting(16);
@@ -15,8 +15,8 @@ export const findUser = async (req, res, next) => {
                 }
                 await UserModel.findByIdAndUpdate({ _id: req.user._id }, tokenObj );
                 if (err) throw err;
-                res.json({"msg":"Successfully Authenticated", "role": req.user.role, "user_id": req.user._id, "user_name": req.user.name, "token": req.user.token });
-                //console.log(req.user);
+                res.json({"success": true, "msg":"Successfully Authenticated", "role": req.user.role, "user_id": req.user._id, "user_name": req.user.name, "token": req.user.token });
+                console.log(req.user);
             });
         }
     })(req, res, next);
@@ -63,7 +63,7 @@ export const getUser = async (req, res) => {
 
 export const logUserOut = (req, res) => {
     req.logout(function(err) {
-        if (err) { return next(err); }
+        if (err) { return err; }
         req.send('success_msg', 'Logged out succesfully')
     });
 }
