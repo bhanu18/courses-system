@@ -1,2 +1,4 @@
 # courses-system
-The frontend is at master branch
+This is a simple system for view and adding courses with roles as student and instructor 
+
+*** my code practice
