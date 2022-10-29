@@ -4,28 +4,24 @@ import bcrypt from 'bcryptjs';
 
 
 const passportConfig = (passport) => {
-    passport.use(
-        new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-            // Match user
-            UserModel.findOne({
-                email: email
-            }).then(user => {
+    passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
 
-                if (!user) {
-                    return done(null, false, { message: 'That email is not registered' });
-                }
+        const user = await UserModel.findOne({ email: email })
 
-                // Match password
-                bcrypt.compare(password, user.password, (err, isMatch) => {
-                    if (err) throw err;
-                    if (isMatch) {
-                        return done(null, user);
-                    } else {
-                        return done(null, false, { message: 'Password incorrect' });
-                    }
-                });
-            });
-        })
+        if (!user) {
+            return done(null, false, { message: 'That email is not registered' });
+        }
+
+        // Match password
+        bcrypt.compare(password, user.password, (err, isMatch) => {
+            if (err) throw err;
+            if (isMatch) {
+                return done(null, user);
+            } else {
+                return done(null, false, { message: 'Password incorrect' });
+            }
+        });
+    })
     );
 
     passport.serializeUser((user, done) => {

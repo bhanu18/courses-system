@@ -28,7 +28,7 @@ export const addCategory = async (req, res) =>{
     try {
         const categories = await Categories.create(req.body);
 
-        res.send({'success': 'true'});
+        res.send({'success': true});
     } catch (error) {
         console.log(error);
         res.status(500).json({'error': error.toString()});
@@ -37,9 +37,33 @@ export const addCategory = async (req, res) =>{
 
 export const filter = async (req, res ) => {
     try {
-        const course = await courseModel.find({ title: req.query.title }).populate('User').lean();
 
-        res.send(course)
+        let searchObj = {};
+
+        if(req.query.title){
+            searchObj = {
+                title: req.query.title
+            }
+        }
+
+        if(req.query.price){
+            searchObj = {
+                price: req.query.price
+            }
+        }
+
+        const course = await courseModel.find(searchObj).populate('User').lean();
+
+        if(course.length == 0){
+            res.status(200).send('No courses');
+        }else{
+            let response = {
+                "success": true,
+                "data": course
+            }
+            //console.log(searchObj);
+            res.status(200).send(response);
+        }
     } catch (error) {
         console.log(error);
         res.status(500).send({'msg': '500'});
@@ -47,10 +71,14 @@ export const filter = async (req, res ) => {
 }
 
 
-export const deleteCourse = async () => {
+export const deleteCourse = async (req, res) => {
     try {
-        const course = await courseModel.deleteOne();
+        await courseModel.deleteOne({ _id: req.query.id});
+
+        res.json({'msg': "course deleted"})
+        
     } catch (error) {
+        console.log(error);
         
     }
 }
